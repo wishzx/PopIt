@@ -1,4 +1,4 @@
-#H3 Installation guide
+#h3 Installation guide
 
 install npx and by doing so npm and node
 
