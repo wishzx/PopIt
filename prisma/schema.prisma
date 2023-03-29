@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum Gender {
+  Male
+  Female
+  Polygender
+  Genderqueer
+  Agender
+  Genderfluid
+  Nonbinary
+}
+
+model User {
+  id              String @id @default(cuid()) 
+  email           String @unique @db.VarChar(64) // gmail max length
+  password        String 
+  isAdmin         Boolean @default(false)
+  createdAt       DateTime @default(now())
+
+  first_name      String @db.VarChar(32)
+  last_name       String @db.VarChar(32)
+  instagram_uname String @unique @db.VarChar(30) //ig max uname char according to google
+  gender          Gender
+
+  content Content[] //Denormalization involves duplicating some of the data from one table into another, in order to avoid the need for complex joins or subqueries. This can make certain queries faster, since all the necessary data is contained within a single table or index.
+}
+
+/// @default(cuid()) 
+
+model Challenge {
+  id   String   @id @default(cuid()) 
+  createdAt DateTime @default(now())
+  name String @db.VarChar(255)
+  //tags String[] @db.VarChar(16)
+  tags String @db.VarChar(16)
+
+  content Content[]
+}
+
+model Content {
+  id        String @id @default(cuid()) 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  image_url String @db.VarChar(2048)
+  likes     Int @default(0)//@db.UnsignedInt 
+
+  challenge_id String
+  challenge    Challenge @relation(fields: [challenge_id], references: [id])
+
+  user_id String
+  user    User  @relation(fields: [user_id], references: [id])
+}
