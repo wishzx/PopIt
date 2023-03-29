@@ -7,6 +7,12 @@ import { createNewUser, signIn} from './handlers/user'
 import { errorHandler } from './modules/middleware'
 
 const app = express()
+/*
+idea of what to add next : grpc, trpc, graphql
+more testing 
+maybe some background jobs, maybe do nest mvc 
+*/
+
 
 /*
 how to create your middleware
