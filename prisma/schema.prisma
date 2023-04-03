@@ -23,7 +23,7 @@ enum Gender {
 
 model User {
   id              String @id @default(cuid()) 
-  email           String @unique @db.VarChar(64) // gmail max length
+  email           String @unique @db.VarChar(64)  // gmail max length
   password        String 
   isAdmin         Boolean @default(false)
   createdAt       DateTime @default(now())
@@ -34,6 +34,9 @@ model User {
   gender          Gender
 
   content Content[] //Denormalization involves duplicating some of the data from one table into another, in order to avoid the need for complex joins or subqueries. This can make certain queries faster, since all the necessary data is contained within a single table or index.
+  likes Likes[]
+
+  @@index([email], type: Hash) // for faster auth queries - hash allow only = <> but it's faster
 }
 
 /// @default(cuid()) 
@@ -50,15 +53,33 @@ model Challenge {
 
 model Content {
   id        String @id @default(cuid()) 
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt
 
   image_url String @db.VarChar(2048)
   likes     Int @default(0)//@db.UnsignedInt 
 
   challenge_id String
-  challenge    Challenge @relation(fields: [challenge_id], references: [id])
+  challenge    Challenge @relation(fields: [challenge_id], references: [id], onDelete: Cascade) // when challenge deleted i should delete also all content for that challenge  
 
   user_id String
-  user    User  @relation(fields: [user_id], references: [id])
+  user    User  @relation(fields: [user_id], references: [id], onDelete: Cascade) // when user is deleted should delete all his content
+  
+  likes_ids Likes[]
+
+}
+
+
+
+// sql vs nosql vs graphdb ?  
+
+model Likes {
+  user_id String
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade) // if i delete a user i should delete also all likes from that user
+
+  content_id String
+  content Content @relation(fields: [content_id], references: [id], onDelete: Cascade) // if i delete a content i should delete all likes of that content
+
+  @@id([user_id,content_id])
 }

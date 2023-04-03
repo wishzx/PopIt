@@ -7,17 +7,17 @@ import {
     getChallenges,
     getOneChallenge,
     updateChallenge,
-} from "./handlers/challenge";
+} from "../handlers/challenge";
 import {
     createContent,
     deleteContent,
     getContent,
     getOneContent,
     updateContent,
-} from "./handlers/content";
-import { errorHandler, handleInputErrors } from "./modules/middleware";
+} from "../handlers/content";
+import { errorHandler, handleInputErrors } from "../modules/middleware";
 
-const router = Router(); // remember to create an error handler at the end for this router
+const router = Router();
 
 //gRPc->trpc for typegeneration internal api for frontend
 // REST for external API also because you monetize on the number of calls
@@ -43,27 +43,6 @@ router.put(
     (req, res) => {}
 );
 router.delete("/user/:id", () => {});
-
-const isArrayOfMinLengtOneAndOfStringMaxLength16 = (
-    field: string,
-    is = { optional: false }
-) =>
-    body(field)
-        .optional(is.optional)
-        .isArray({ min: 1 })
-        .custom((array: unknown[]) => {
-            if (
-                !array.every(
-                    (tag: unknown) =>
-                        typeof tag === "string" && tag.length <= 16
-                )
-            ) {
-                throw new Error(
-                    `{field} must be an array of strings of max length of 16`
-                );
-            }
-            return true;
-        });
 
 /**
  * Challenge
@@ -108,6 +87,7 @@ router.put(
 );
 router.delete("/content/:id", deleteContent);
 
+//PLEASE DO NOT PUT ROUTES BELOW THIS ERROR HANDLER
 router.use(errorHandler);
+export const adminRouter = router;
 
-export default router;

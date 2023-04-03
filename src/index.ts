@@ -1,11 +1,10 @@
 // sync node errors
 process.on("uncaughtException", (e) => {
-    console.error(e);
+    console.error("uncaught node expection: " + e);
 });
-
 // async node errors
 process.on("unhandledRejection", (e) => {
-    console.error(e);
+    console.error("unhandled node rejection: " + e);
 });
 
 //load variables from .env file, IMPORTANT: import this first before creating the server
@@ -16,6 +15,8 @@ import config from "./config";
 
 //EXPRESS
 import app from "./server";
+
+
 
 app.listen(config.port || 3001, () => {
     console.log(`server on http://localhost:${config.port}`);

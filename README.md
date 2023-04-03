@@ -3,13 +3,28 @@ The code repository of a fullstack app with the main objective of teaching junio
 
 ### Installation guide
 
-install npx and by doing so npm and node
+install npx and by doing so npm and node 18
 
 ```bash
 npm i
 ```
 
+install postgresql locally or in cloud 
+
 rename .env.example to .env and put there your db connection and a secret
+
+create prisma skd
+
+```bash
+npx prisma migrate dev --name init
+```
+
+seed the db
+
+```bash
+npm run seed
+``'
+
 
 ```bash
 npm run dev

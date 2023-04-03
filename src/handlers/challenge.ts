@@ -7,7 +7,7 @@ import prisma from "../modules/db";
 export const getChallenges = async (req, res, next) => {
     try {
         const challenges = await prisma.challenge.findMany();
-        res.json({ data: challenges });
+        res.json(challenges);
     } catch (e) {
         next(e);
     }
@@ -19,7 +19,7 @@ export const getOneChallenge = async (req, res, next) => {
         const challenge = await prisma.challenge.findUnique({
             where: { id: req.params.id },
         });
-        res.json({ data: challenge });
+        res.json(challenge);
     } catch (e) {
         next(e);
     }
@@ -35,7 +35,7 @@ export const createChallenge = async (req, res, next) => {
                 content: req.body.content,
             },
         });
-        res.json({ data: challenge });
+        res.json(challenge);
     } catch (e) {
         next(e);
     }
@@ -50,7 +50,7 @@ export const updateChallenge = async (req, res, next) => {
             },
             data: req.body,
         });
-        res.json({ data: challenge });
+        res.json(challenge);
     } catch (e) {
         next(e);
     }
@@ -65,7 +65,7 @@ export const deleteChallenge = async (req, res, next) => {
                 id: req.params.id,
             },
         });
-        res.json({ data: challenge });
+        res.json(challenge);
     } catch (e) {
         next(e);
     }

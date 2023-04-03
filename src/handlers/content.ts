@@ -4,11 +4,28 @@ import prisma from "../modules/db";
 // because doing manipulation in memory is not good so go back change the schema
 // and migrate the db instead
 
+// Create
+export const createContentbyUser = async (req, res, next) => {
+    try {
+        const content = await prisma.content.create({
+            data: {
+                image_url: req.body.image_url,
+                challenge_id: req.body.challenge_id,
+                user_id: req.user.id,
+            },
+        });
+        res.json(content);
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+};
+
 // Get all
 export const getContent = async (req, res, next) => {
     try {
         const contents = await prisma.content.findMany();
-        res.json({ data: contents });
+        res.json(contents);
     } catch (e) {
         next(e);
     }
@@ -20,7 +37,7 @@ export const getOneContent = async (req, res, next) => {
         const content = await prisma.content.findUnique({
             where: { id: req.params.id },
         });
-        res.json({ data: content });
+        res.json(content);
     } catch (e) {
         next(e);
     }
@@ -35,7 +52,7 @@ export const createContent = async (req, res, next) => {
                 user_id: req.body.user_id,
             },
         });
-        res.json({ data: content });
+        res.json(content);
     } catch (e) {
         next(e);
     }
@@ -50,7 +67,7 @@ export const updateContent = async (req, res, next) => {
             },
             data: req.body,
         });
-        res.json({ data: content });
+        res.json(content);
     } catch (e) {
         next(e);
     }
@@ -65,7 +82,7 @@ export const deleteContent = async (req, res, next) => {
                 id: req.params.id,
             },
         });
-        res.json({ data: content });
+        res.json(content);
     } catch (e) {
         next(e);
     }

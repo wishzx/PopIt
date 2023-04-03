@@ -1,0 +1,1 @@
+-   Must always try catch possible async errors and call next(e) with a proper error.type code -> see errorHandler middleware
