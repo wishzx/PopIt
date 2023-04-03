@@ -31,4 +31,3 @@ npm run dev
 ```
 
 
-https://popit-9s17.onrender.com 🎉🎉🎉🎉🎉
