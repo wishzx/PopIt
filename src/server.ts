@@ -23,9 +23,9 @@ app.get("/", (req, res) => {
     res.json({ message: "hello" });
 });
 // docs
-import swaggerUi from "swagger-ui-express";
+/* import swaggerUi from "swagger-ui-express";
 const swaggerFile = require("./modules/docs/swagger.json");
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile)); */
 
 //custom middlewares
 import { adminOnly, protect } from "./modules/auth";
