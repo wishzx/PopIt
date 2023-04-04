@@ -1,26 +1,8 @@
 import prisma from "../modules/db";
 
-export const getUserLikes = async (id: string) => {
-    // BRUH ... denormalization.jpg
-    /* const likes = await prisma.likes.findMany({
-        where: {
-            user_id: id,
-        },
-        select: { content_id: true },
-    });
-    return Object.values(likes); */
-    const user = await prisma.user.findUnique({
-        where: { id: id },
 
-        select: { likes: { select: { content_id: true } } },
-    });
 
-    // BAD
-    const likeList = user.likes.map((l) => {
-        return l.content_id;
-    });
-    return likeList;
-};
+// protected
 
 export const createLike = async (req, res, next) => {
     try {
@@ -69,4 +51,26 @@ export const decreaseLike = async (content_id: string, count: number) => {
         where: { id: content_id },
         data: { likes: { decrement: count } },
     });
+};
+
+export const getUserLikes = async (id: string) => {
+    // BRUH ... denormalization.jpg
+    /* const likes = await prisma.likes.findMany({
+        where: {
+            user_id: id,
+        },
+        select: { content_id: true },
+    });
+    return Object.values(likes); */
+    const user = await prisma.user.findUnique({
+        where: { id: id },
+
+        select: { likes: { select: { content_id: true } } },
+    });
+
+    // BAD
+    const likeList = user.likes.map((l) => {
+        return l.content_id;
+    });
+    return likeList;
 };

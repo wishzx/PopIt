@@ -4,13 +4,15 @@ import prisma from "../modules/db";
 // because doing manipulation in memory is not good so go back change the schema
 // and migrate the db instead
 
+// protected
+
 // Create
 export const createContentbyUser = async (req, res, next) => {
     try {
         const content = await prisma.content.create({
             data: {
                 image_url: req.body.image_url,
-                challenge_id: req.body.challenge_id,
+                challenge_id: req.params.id,
                 user_id: req.user.id,
             },
         });
@@ -21,10 +23,16 @@ export const createContentbyUser = async (req, res, next) => {
     }
 };
 
+// admin
+
 // Get all
 export const getContent = async (req, res, next) => {
     try {
-        const contents = await prisma.content.findMany();
+        const contents = await prisma.content.findMany({
+            select: {
+                id: true,
+            },
+        });
         res.json(contents);
     } catch (e) {
         next(e);

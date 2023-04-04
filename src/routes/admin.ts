@@ -15,6 +15,7 @@ import {
     getOneContent,
     updateContent,
 } from "../handlers/content";
+import { deleteUser, getOneUser, getUsers, updateUser } from "../handlers/user";
 import { errorHandler, handleInputErrors } from "../modules/middleware";
 
 const router = Router();
@@ -27,10 +28,8 @@ const router = Router();
 /**
  * User
  */
-router.get("/user", (req, res) => {
-    res.send("you are auth");
-});
-router.get("/user/:id", () => {});
+router.get("/user", getUsers);
+router.get("/user/:id", getOneUser);
 router.post("/user/", (req, res) => {
     res.status(410).send("use the /signin endpoint instead");
 });
@@ -40,9 +39,9 @@ router.put(
     body("instagram_uname").optional().isLength({ max: 64 }).isString(),
     body("gender").optional().isIn(Object.values(Gender)),
     handleInputErrors,
-    (req, res) => {}
+    updateUser
 );
-router.delete("/user/:id", () => {});
+router.delete("/user/:id", deleteUser);
 
 /**
  * Challenge
@@ -90,4 +89,3 @@ router.delete("/content/:id", deleteContent);
 //PLEASE DO NOT PUT ROUTES BELOW THIS ERROR HANDLER
 router.use(errorHandler);
 export const adminRouter = router;
-

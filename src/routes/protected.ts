@@ -1,16 +1,15 @@
 import Router from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { createContentbyUser } from "../handlers/content";
-import { protect } from "../modules/auth";
 import { errorHandler, handleInputErrors } from "../modules/middleware";
 import { createLike, removeLike } from "../handlers/like";
+import { getChallengeFromUser, getChallenges } from "../handlers/challenge";
 
 const router = Router();
 
 router.post(
-    "/content",
+    "/content/:id",
     body("image_url").exists().isURL().isLength({ max: 2048 }),
-    body("challenge_id").exists().isString(),
     handleInputErrors,
     createContentbyUser
 );
@@ -28,6 +27,9 @@ router.delete(
     handleInputErrors,
     removeLike
 );
+
+router.get("/challenge", getChallenges);
+router.get("/challengeUser/:id", getChallengeFromUser);
 
 //PLEASE DO NOT PUT ROUTES BELOW THIS ERROR HANDLER
 router.use(errorHandler);

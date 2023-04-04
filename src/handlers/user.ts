@@ -66,3 +66,60 @@ export const signIn = async (req, res, next) => {
         likes: (await getUserLikes(user.id)) || [],
     });
 };
+
+// admin
+
+export const getUsers = async (req, res, next) => {
+    try {
+        const users = await prisma.user.findMany({
+            select: { instagram_uname: true, id: true },
+        });
+        res.json(users);
+    } catch (e) {
+        next(e);
+    }
+};
+
+export const getOneUser = async (req, res, next) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: req.params.id },
+            select: {
+                email: true,
+                first_name: true,
+                gender: true,
+                instagram_uname: true,
+                isAdmin: true,
+                last_name: true,
+                id: true,
+            },
+        });
+        res.json(user);
+    } catch (e) {
+        next(e);
+    }
+};
+
+// In practice having a delete/update is really dangerous because a admin account could be compromised
+export const updateUser = async (req, res, next) => {
+    try {
+        const user = await prisma.user.update({
+            where: {
+                id: req.params.id,
+            },
+            data: req.body,
+        });
+        res.json(user);
+    } catch (e) {
+        next(e);
+    }
+};
+
+export const deleteUser = async (req, res, next) => {
+    try {
+        const user = await prisma.user.delete({
+            where: { id: req.params.id },
+        });
+        res.json(user);
+    } catch (e) {}
+};

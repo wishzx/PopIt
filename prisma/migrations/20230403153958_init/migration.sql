@@ -4,12 +4,12 @@ CREATE TYPE "Gender" AS ENUM ('Male', 'Female', 'Polygender', 'Genderqueer', 'Ag
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
+    "email" VARCHAR(64) NOT NULL,
+    "password" TEXT NOT NULL,
+    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "first_name" VARCHAR(32) NOT NULL,
     "last_name" VARCHAR(32) NOT NULL,
-    "email" VARCHAR(64) NOT NULL,
-    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
-    "password" TEXT NOT NULL,
     "instagram_uname" VARCHAR(30) NOT NULL,
     "gender" "Gender" NOT NULL,
 
@@ -39,14 +39,31 @@ CREATE TABLE "Content" (
     CONSTRAINT "Content_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Likes" (
+    "user_id" TEXT NOT NULL,
+    "content_id" TEXT NOT NULL,
+
+    CONSTRAINT "Likes_pkey" PRIMARY KEY ("user_id","content_id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_instagram_uname_key" ON "User"("instagram_uname");
 
--- AddForeignKey
-ALTER TABLE "Content" ADD CONSTRAINT "Content_challenge_id_fkey" FOREIGN KEY ("challenge_id") REFERENCES "Challenge"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE INDEX "User_email_idx" ON "User" USING HASH ("email");
 
 -- AddForeignKey
-ALTER TABLE "Content" ADD CONSTRAINT "Content_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Content" ADD CONSTRAINT "Content_challenge_id_fkey" FOREIGN KEY ("challenge_id") REFERENCES "Challenge"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Content" ADD CONSTRAINT "Content_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Likes" ADD CONSTRAINT "Likes_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Likes" ADD CONSTRAINT "Likes_content_id_fkey" FOREIGN KEY ("content_id") REFERENCES "Content"("id") ON DELETE CASCADE ON UPDATE CASCADE;

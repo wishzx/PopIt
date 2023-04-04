@@ -33,7 +33,7 @@ model User {
   instagram_uname String @unique @db.VarChar(30) //ig max uname char according to google
   gender          Gender
 
-  content Content[] //Denormalization involves duplicating some of the data from one table into another, in order to avoid the need for complex joins or subqueries. This can make certain queries faster, since all the necessary data is contained within a single table or index.
+  content Content[] 
   likes Likes[]
 
   @@index([email], type: Hash) // for faster auth queries - hash allow only = <> but it's faster
