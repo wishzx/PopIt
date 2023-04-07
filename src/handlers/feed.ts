@@ -11,14 +11,15 @@ export const feed = async (req, res, next) => {
 
         feed = await prisma.content.findMany({
             take: 100,
-
             select: {
                 image_url: true,
                 likes: true,
                 id: true,
                 challenge: { select: { tags: true, name: true } },
                 user: { select: { instagram_uname: true } },
+                message: true,
             },
+
             orderBy: {
                 createdAt: "desc",
             },
