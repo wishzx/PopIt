@@ -23,7 +23,7 @@ seed the db
 
 ```bash
 npm run seed
-``'
+```
 
 
 ```bash
